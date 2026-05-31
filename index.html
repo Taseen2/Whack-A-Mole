@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A polished, responsive Whack-a-Mole game.">
+  <title>Whack-a-Mole</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="mole.svg" type="image/svg+xml">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="game-card" aria-labelledby="game-title">
+      <header class="hero">
+        <div>
+          <h1 id="game-title">Whack-a-Mole</h1>
+        </div>
+
+        <div class="controls" aria-label="Game controls">
+          <button id="start-btn" class="control-btn primary-control" type="button">Start Game</button>
+          <button id="pause-btn" class="control-btn" type="button" disabled>Pause</button>
+          <button id="restart-btn" class="control-btn" type="button" disabled>Restart</button>
+        </div>
+      </header>
+
+      <div class="dashboard" aria-label="Game stats">
+        <div class="stat">
+          <span class="label">Score</span>
+          <span class="value score">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Time</span>
+          <span class="value timer">10</span>
+        </div>
+        <div class="stat">
+          <span class="label">High</span>
+          <span class="value high-score">0</span>
+        </div>
+      </div>
+
+      <div class="settings" aria-label="Game settings">
+        <div class="difficulty-group" aria-label="Difficulty level">
+          <button class="difficulty-btn is-active" type="button" data-difficulty="easy">Easy</button>
+          <button class="difficulty-btn" type="button" data-difficulty="normal">Normal</button>
+          <button class="difficulty-btn" type="button" data-difficulty="hard">Hard</button>
+        </div>
+
+        <div class="timer-control" aria-label="Timer length">
+          <button id="decrease-time" class="stepper-btn" type="button" aria-label="Decrease time">-</button>
+          <span class="timer-choice"><span id="duration-value">15</span>s</span>
+          <button id="increase-time" class="stepper-btn" type="button" aria-label="Increase time">+</button>
+        </div>
+      </div>
+
+      <div class="game" aria-label="Whack-a-Mole board">
+        <div class="hole hole1"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole2"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole3"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole4"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole5"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole6"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole7"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole8"><button class="mole" type="button" aria-label="Mole"></button></div>
+        <div class="hole hole9"><button class="mole" type="button" aria-label="Mole"></button></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="countdown" class="overlay" aria-hidden="true">
+    <div class="countdown-text"></div>
+  </div>
+
+  <div id="game-over" class="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+      <button class="close-modal-btn" type="button" aria-label="Close game over dialog">x</button>
+      <h2 id="game-over-title">Time's Up!</h2>
+      <p>Final Score: <span id="final-score">0</span></p>
+      <button class="play-again-btn" type="button">Play Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

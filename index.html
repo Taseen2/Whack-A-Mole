@@ -26,32 +26,35 @@
         </div>
       </header>
 
-      <div class="dashboard" aria-label="Game stats">
+      <div class="dashboard" aria-label="Game stats and settings">
         <div class="stat">
           <span class="label">Score</span>
           <span class="value score">0</span>
         </div>
         <div class="stat">
           <span class="label">Time</span>
-          <span class="value timer">10</span>
+          <div class="stepper-control">
+            <button id="decrease-time" class="stepper-btn" type="button" aria-label="Decrease time">-</button>
+            <span id="duration-value" class="value timer">10</span>
+            <button id="increase-time" class="stepper-btn" type="button" aria-label="Increase time">+</button>
+          </div>
+        </div>
+        <div class="stat">
+          <span class="label">Combo</span>
+          <span class="value combo">0</span>
         </div>
         <div class="stat">
           <span class="label">High</span>
           <span class="value high-score">0</span>
         </div>
-      </div>
-
-      <div class="settings" aria-label="Game settings">
-        <div class="difficulty-group" aria-label="Difficulty level">
-          <button class="difficulty-btn is-active" type="button" data-difficulty="easy">Easy</button>
-          <button class="difficulty-btn" type="button" data-difficulty="normal">Normal</button>
-          <button class="difficulty-btn" type="button" data-difficulty="hard">Hard</button>
-        </div>
-
-        <div class="timer-control" aria-label="Timer length">
-          <button id="decrease-time" class="stepper-btn" type="button" aria-label="Decrease time">-</button>
-          <span class="timer-choice"><span id="duration-value">15</span>s</span>
-          <button id="increase-time" class="stepper-btn" type="button" aria-label="Increase time">+</button>
+        
+        <div class="difficulty-panel stat" aria-label="Difficulty level">
+          <span class="label">Difficulty</span>
+          <div class="difficulty-group">
+            <button class="difficulty-btn is-active" type="button" data-difficulty="easy">Easy</button>
+            <button class="difficulty-btn" type="button" data-difficulty="normal">Normal</button>
+            <button class="difficulty-btn" type="button" data-difficulty="hard">Hard</button>
+          </div>
         </div>
       </div>
 
@@ -81,6 +84,11 @@
       <button class="play-again-btn" type="button">Play Again</button>
     </div>
   </div>
+
+  <audio id="sound-hit" src=""></audio>
+  <audio id="sound-miss" src=""></audio>
+  <audio id="sound-start" src=""></audio>
+  <audio id="sound-gameover" src=""></audio>
 
   <script src="script.js"></script>
 </body>

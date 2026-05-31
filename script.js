@@ -1,8 +1,15 @@
 const holes = document.querySelectorAll('.hole');
 const scoreBoard = document.querySelector('.score');
 const timerDisplay = document.querySelector('.timer');
+const comboBoard = document.querySelector('.combo');
 const highScoreBoard = document.querySelector('.high-score');
 const moles = document.querySelectorAll('.mole');
+
+const soundHit = document.getElementById('sound-hit');
+const soundMiss = document.getElementById('sound-miss');
+const soundStart = document.getElementById('sound-start');
+const soundGameOver = document.getElementById('sound-gameover');
+
 const countdownOverlay = document.getElementById('countdown');
 const countdownText = document.querySelector('.countdown-text');
 const gameOverOverlay = document.getElementById('game-over');
@@ -27,6 +34,8 @@ let lastHole;
 let timeUp = true;
 let isPaused = false;
 let score = 0;
+let combo = 0;
+let maxCombo = 0;
 let selectedDifficulty = 'easy';
 let selectedDuration = difficultySettings[selectedDifficulty].duration;
 let timeLeft = selectedDuration;
@@ -39,6 +48,12 @@ let isStarting = false;
 highScoreBoard.textContent = highScore;
 timerDisplay.textContent = selectedDuration;
 durationValue.textContent = selectedDuration;
+
+function playSound(sound) {
+    if (!sound || !sound.src) return;
+    sound.currentTime = 0;
+    sound.play().catch(e => {});
+}
 
 function randomTime(min, max) {
     return Math.round(Math.random() * (max - min) + min);
@@ -62,6 +77,12 @@ function peep() {
     const hole = randomHole(holes);
     hole.classList.add('up');
     peepTimeout = setTimeout(() => {
+        if (hole.classList.contains('up')) {
+            // Strict Combo: Reset if mole disappears without being hit
+            combo = 0;
+            comboBoard.textContent = combo;
+            playSound(soundMiss);
+        }
         hole.classList.remove('up');
         if (!timeUp) peep();
     }, time);
@@ -71,6 +92,7 @@ function startGame() {
     if (isStarting) return;
 
     isStarting = true;
+    playSound(soundStart);
     gameOverOverlay.style.display = 'none';
     gameOverOverlay.setAttribute('aria-hidden', 'true');
     startBtn.disabled = true;
@@ -119,8 +141,10 @@ function beginGame() {
 
 function resetGame() {
     score = 0;
+    combo = 0;
     timeLeft = selectedDuration;
     scoreBoard.textContent = 0;
+    comboBoard.textContent = 0;
     timerDisplay.textContent = timeLeft;
     clearInterval(timer);
     clearInterval(countdownInterval);
@@ -135,6 +159,7 @@ function endGame() {
     clearInterval(timer);
     clearInterval(countdownInterval);
     clearTimeout(peepTimeout);
+    playSound(soundGameOver);
     startBtn.disabled = false;
     pauseBtn.disabled = true;
     restartBtn.disabled = true;
@@ -240,12 +265,27 @@ function bonk(e) {
     if (!e.isTrusted) return; // cheater!
     if (isPaused || timeUp) return;
     
+    e.stopPropagation(); // Prevent triggering the miss logic on the hole
+    
     if (this.parentNode.classList.contains('up')) {
         score++;
+        combo++;
+        if (combo > maxCombo) maxCombo = combo;
+        
         this.parentNode.classList.remove('up');
         this.classList.add('hit');
         showHitScore(this.parentNode);
+        playSound(soundHit);
+        
         scoreBoard.textContent = score;
+        comboBoard.textContent = combo;
+        
+        // Pulse effect on milestones
+        if (combo % 5 === 0) {
+            comboBoard.classList.add('combo-pulse');
+            setTimeout(() => comboBoard.classList.remove('combo-pulse'), 400);
+        }
+
         setTimeout(() => this.classList.remove('hit'), 180);
         
         // Screen shake juice
@@ -254,7 +294,21 @@ function bonk(e) {
     }
 }
 
+function handleMiss(e) {
+    if (timeUp || isPaused || isStarting) return;
+    
+    // If we click something that isn't a mole (like the hole soil), reset combo
+    if (!e.target.classList.contains('mole')) {
+        if (combo > 0) {
+            combo = 0;
+            comboBoard.textContent = combo;
+            playSound(soundMiss);
+        }
+    }
+}
+
 moles.forEach(mole => mole.addEventListener('click', bonk));
+document.querySelector('.game').addEventListener('click', handleMiss);
 startBtn.addEventListener('click', startGame);
 pauseBtn.addEventListener('click', pauseGame);
 restartBtn.addEventListener('click', restartGame);

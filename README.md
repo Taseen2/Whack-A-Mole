@@ -43,10 +43,3 @@ To run this game locally:
 2.  Open `index.html` in your favorite web browser.
 3.  Enjoy the game!
 
-## 📜 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
-*Built with ❤️ as a tribute to the JavaScript30 series, with modern UI enhancements.*
